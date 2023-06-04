@@ -11,32 +11,146 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  hash      String //password
-  firstName String
-  lastName  String
-  dob       DateTime?
-  gender    String?
-  avatar    String?
-  username  String    @unique
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  first_name       String
+  last_name        String
+  username         String    @unique
+  email            String    @unique
+  password         String
+  phone_number     String?   @unique
+  country          String?
+  date_of_birth    DateTime?
+  image_url        String?
+  description      String?
+  social_media     Social?
+  referral_method  String?
+  interests        String[]
+  is_public        Boolean   @default(true)
+  email_verified   Boolean   @default(false)
+  account_disabled Boolean   @default(false)
+  community_admin  Boolean   @default(false)
+  last_active      DateTime?
+  gender           String?
+
+  resources Resource[]
+
+  tokens Token[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Otp       Otp[]
 
   @@map("users")
 }
 
-model Otp {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  otp       String
-  type      String // email / phone
-  expiresAt DateTime
+model Token {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  user_id String  @db.ObjectId
+  user    User    @relation(fields: [user_id], references: [id])
+  token   String? @unique
+
+  // expires DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
 
-  @@map("otps")
+  @@map("tokens")
+}
+
+enum EventType {
+  virtual
+  physical
+  hybrid
+}
+
+model Event {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  website         String?
+  banner_image    String?
+  event_type      EventType // virtual / physical / hybrid
+  start_timestamp DateTime
+  end_timestamp   DateTime
+  location        String?
+  going_attendees Int       @default(0)
+  approved        Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Resource {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  tags        String[]
+  author_id   String   @db.ObjectId
+  author      User     @relation(fields: [author_id], references: [id])
+  url_slug    String   @unique
+  views_count Int      @default(0)
+  approved    Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resources")
+}
+
+model Perk {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String
+  tags         String[]
+  banner_image String?
+  company      String
+  company_url  String
+  perk_url     String
+  view_count   Int      @default(0)
+  has_expired  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("perks")
+}
+
+model HQ {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  key    String @unique
+  config Json   @db.Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("hqs")
+}
+
+model Announcement {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  creator   String
+  text_body String
+  html_body String
+  is_new    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("announcements")
+}
+
+model Social {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  facebook  String?
+  twitter   String?
+  instagram String?
+  youtube   String?
+  linkedin  String?
+  github    String?
+  behance   String?
+  dribbble  String?
+  user_id   String  @unique @db.ObjectId
+  user      User    @relation(fields: [user_id], references: [id])
 }

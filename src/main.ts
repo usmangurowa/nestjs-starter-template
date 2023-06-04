@@ -12,12 +12,12 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Finuel Api')
+    .setTitle('Genztechies Api')
     .setDescription(
-      'The Finuel API endpoints for the Finuel web and mobile apps',
+      'The Genztechies API endpoints for the Genztechies web and mobile apps',
     )
     .setVersion('1.0')
-    .addTag('Finuel')
+    .addTag('Genztechies')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

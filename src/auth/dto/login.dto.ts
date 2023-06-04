@@ -1,9 +1,11 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+// import { PartialType } from '@nestjs/swagger';
 
-export class SignInDto {
-  @IsEmail()
+export class LoginDto {
+  // @IsEmail()
+  @IsString()
   @IsNotEmpty()
-  email: string;
+  identifier: string;
 
   @IsString()
   @IsNotEmpty()

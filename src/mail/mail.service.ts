@@ -23,7 +23,7 @@ export class MailService {
     sendSmtpEmail.subject = subject;
     sendSmtpEmail.htmlContent =
       '<html><body><h1>{{params.otp}}</h1></body></html>';
-    sendSmtpEmail.sender = { name: 'Usman', email: 'usman@finuel.com' };
+    sendSmtpEmail.sender = { name: 'Usman', email: 'usman@genztechies.com' };
     sendSmtpEmail.to = [...to];
     sendSmtpEmail.params = {
       otp: content,
